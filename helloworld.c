@@ -1,23 +1,21 @@
 #include <stdio.h>
-#include <stdint.h>
-/* copy input to output; 1st version */
-void main()
-{
-  int input, blanks, tabs, newlines;
-  blanks = tabs = newlines = 0;
-  while ((input = getchar()) != EOF){
-    if(input== ' ')
-      blanks++;
- 
-    if(input== '\t')
-      tabs++;
 
-    if(input == '\n')
-      newlines++;
+void main() {
+    int input;
+    int temp = 0;
 
-
-  }
-
-
-  printf("blanks: %d  tabs: %d  Newlines: %d", blanks, tabs, newlines);
+    while ((input = getchar()) != EOF) {
+        printf("Processing character: '%c'\n", input); // Debugging output
+        if (input == ' ') {
+            if (!temp) {
+                temp = 1;
+                putchar(input); // Output the first space
+            }
+        } else {
+            temp = 0;
+            putchar(input); // Output non-space characters
+        }
+    }
 }
+
+
