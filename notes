@@ -1,0 +1,6 @@
+got 2 lists.
+
+unorganized list of IDs in each. 
+
+get smallest number in each list, then compare them. get distance between them {abs(X-Y)} then sum differences. 
+
