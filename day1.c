@@ -60,6 +60,28 @@ void printArray(int *arr, int len)
   }
 }
 
+int similarityScore(int *left, int *right, int rows)
+{
+  int i = 0;
+  int j = 0;
+  int score=0;
+  for (i=0;i<rows;i++) {
+    int count=0;
+    for (j=0;j<rows;j++)
+    {
+      if(left[i]==right[j])
+      {
+        count++;
+      }
+    }
+    score+=count*left[i];
+  }
+  return score;
+
+}
+
+
+
 void main() {
   FILE *inputs;
   inputs = fopen("./input.txt", "r");
@@ -72,13 +94,14 @@ void main() {
   split(inputs, left, right, nl);
   qsort(left, nl, sizeof(int), compareInts);
   qsort(right, nl, sizeof(int), compareInts);
+//  printf("%d %d", right[0], right[nl-1]);
   createDiff(diff, left, right, nl);
-  printArray(diff, nl);
-  int size = sizeof(diff) / sizeof(diff[0]);
-  printf("The number of elements in the array is: %d\n", size);
+//  printArray(diff, nl);
+ // int size = sizeof(diff) / sizeof(diff[0]);
+//  printf("%d\n",size);
 
-  printf("%d\n", sum(diff, nl));
+  //printf("%d\n", sum(diff, nl));
 //  saveDiff(diff, left, right, nl);
-  
+ printf("%d\n", similarityScore(left, right, nl) ); 
 }
 
