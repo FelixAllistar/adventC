@@ -1,6 +1,72 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX 1000
+typedef struct HashNode {
+  int key;
+  int count;
+  struct HashNode* next;
+} HashNode;
+
+typedef struct HashTable {
+  HashNode* table[MAX];
+} HashTable;
+
+unsigned int hashFunction(int key)
+{
+  return key % MAX;
+}
+
+void initHashTable(HashTable* tableToInit)
+{
+  int i = 0;
+  for (i=0; i <MAX; i++)
+  {
+    tableToInit->table[i]=NULL;
+  }
+}
+
+void insertNode(HashTable* ht, int key)
+{
+    int index = hashFunction(key);
+    HashNode* current = ht->table[index];
+
+    while (current != NULL) {
+        if (current->key == key) {
+            current->count++; // Key exists, increment count
+            return;
+        }
+        current = current->next;// this is for collisions
+    }
+
+  //didnt find it so we makin a new one. 
+    HashNode* newNode = (HashNode*)malloc(sizeof(HashNode));
+    newNode->key = key;
+    newNode->count = 1;
+    newNode->next = ht->table[index];
+    ht->table[index] = newNode;
+ }
+
+
+int retrieveNode(HashTable* hashTable, int key)
+{
+  int index = hashFunction(key);
+  HashNode* current = hashTable->table[index];
+  while(current != NULL)
+  {
+    if (current->key == key)
+    {
+      return current->count;
+    }
+    else{
+      current = current->next;
+    }
+
+  }
+  return 0;
+
+}
+
 int numLines(FILE *_inputTextToCountNumLines)
 {
   int c;
@@ -80,11 +146,33 @@ int similarityScore(int *left, int *right, int rows)
 
 }
 
+void main(){
+  int nl = MAX;
+  FILE *inputs=fopen("./input.txt", "r");
+  int left[nl];
+  int right[nl];
+  int diff[nl];
+  split(inputs, left, right, nl);
+  HashTable ht;
+  initHashTable(&ht);
+  int i =0;
+  for (i=0;i<nl;i++) {
+    insertNode(&ht, right[i]);
+  }
+  int similarityScore = 0;
+  for (i = 0; i < nl; i++)
+  {
+    int count = retrieveNode(&ht, left[i]); 
+    similarityScore+= left[i]*count;
+  }
+  printf("%d",similarityScore);
 
+  
+}
 
-void main() {
-  FILE *inputs;
-  inputs = fopen("./input.txt", "r");
+void main2() {
+  FILE *inputs=fopen("./input.txt", "r");
+
   int nl = numLines(inputs);
   rewind(inputs);
   
